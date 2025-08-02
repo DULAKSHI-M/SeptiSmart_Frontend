@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -20,18 +22,48 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   bool locationConsent = false;
 
-  void registerUser() {
+  void registerUser() async {
     if (_formKey.currentState!.validate()) {
       if (passwordController.text != confirmPasswordController.text) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Passwords do not match")),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text("Passwords do not match")));
         return;
       }
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Registration successful!")),
-      );
+      try {
+        // 🔐 Create user in Firebase Auth
+        UserCredential userCredential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+              email: emailController.text.trim(),
+              password: passwordController.text.trim(),
+            );
+
+        // ✅ Optional: Save more user info
+        String uid = userCredential.user!.uid;
+        DatabaseReference userRef = FirebaseDatabase.instance
+            .ref()
+            .child("users")
+            .child(uid);
+
+        await userRef.set({
+          "firstName": firstNameController.text.trim(),
+          "lastName": lastNameController.text.trim(),
+          "email": emailController.text.trim(),
+          "mobile": mobileController.text.trim(),
+          "locationConsent": locationConsent,
+        });
+
+        // 🎉 Show success message & return to login
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Registration successful!")),
+        );
+        Navigator.pop(context);
+      } on FirebaseAuthException catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.message ?? "Registration failed")),
+        );
+      }
     }
   }
 
@@ -76,7 +108,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             // Full-width container
             Container(
               width: double.infinity,
-              
+
               padding: const EdgeInsets.all(24),
               decoration: const BoxDecoration(
                 color: Colors.white,
@@ -87,7 +119,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text("Name", style: TextStyle(fontWeight: FontWeight.bold)),
+                    const Text(
+                      "Name",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                     const SizedBox(height: 10),
                     Row(
                       children: [
@@ -97,7 +132,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             decoration: const InputDecoration(
                               hintText: "First Name",
                               border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(30)),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(30),
+                                ),
                               ),
                             ),
                           ),
@@ -109,7 +146,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             decoration: const InputDecoration(
                               hintText: "Last Name",
                               border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(30)),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(30),
+                                ),
                               ),
                             ),
                           ),
@@ -117,7 +156,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ],
                     ),
                     const SizedBox(height: 20),
-                    const Text("Email", style: TextStyle(fontWeight: FontWeight.bold)),
+                    const Text(
+                      "Email",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                     const SizedBox(height: 10),
                     TextFormField(
                       controller: emailController,
@@ -130,7 +172,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       keyboardType: TextInputType.emailAddress,
                     ),
                     const SizedBox(height: 20),
-                    const Text("Mobile Number", style: TextStyle(fontWeight: FontWeight.bold)),
+                    const Text(
+                      "Mobile Number",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                     const SizedBox(height: 10),
                     TextFormField(
                       controller: mobileController,
@@ -143,7 +188,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       keyboardType: TextInputType.phone,
                     ),
                     const SizedBox(height: 20),
-                    const Text("Password", style: TextStyle(fontWeight: FontWeight.bold)),
+                    const Text(
+                      "Password",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                     const SizedBox(height: 10),
                     TextFormField(
                       controller: passwordController,
@@ -186,7 +234,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         onPressed: registerUser,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF0F3C1E),
-                          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 40,
+                            vertical: 14,
+                          ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30),
                           ),
@@ -196,11 +247,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           style: TextStyle(fontSize: 16, color: Colors.white),
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
