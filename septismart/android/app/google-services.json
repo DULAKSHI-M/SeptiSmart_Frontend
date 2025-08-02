@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "189832307724",
+    "firebase_url": "https://septismart-aecb1-default-rtdb.firebaseio.com",
+    "project_id": "septismart-aecb1",
+    "storage_bucket": "septismart-aecb1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:189832307724:android:1febebd8932c9166ebfa29",
+        "android_client_info": {
+          "package_name": "com.example.septismart"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1tE6104q3LYt77YCqSNrUCP2rz7winjk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:189832307724:android:be9b6641f3ff4387ebfa29",
+        "android_client_info": {
+          "package_name": "com.septiSmart.septiSmart"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1tE6104q3LYt77YCqSNrUCP2rz7winjk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
