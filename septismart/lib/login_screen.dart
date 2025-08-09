@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'register_screen.dart';
+import 'home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -17,7 +18,8 @@ class _LoginScreenState extends State<LoginScreen> {
   bool isLoading = false;
   String errorMessage = '';
 
-  void loginUser() async {
+  Future<void> loginUser() async {
+    FocusScope.of(context).unfocus();
     setState(() {
       isLoading = true;
       errorMessage = '';
@@ -29,19 +31,25 @@ class _LoginScreenState extends State<LoginScreen> {
         password: passwordController.text.trim(),
       );
 
-      Navigator.pushReplacement(
+      // 👉 redirect to HomeScreen
+      if (!mounted) return;
+      Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => const SuccessScreen()),
+        MaterialPageRoute(builder: (_) => const HomeScreen()),
+        (_) => false,
       );
     } on FirebaseAuthException catch (e) {
-      setState(() {
-        errorMessage = e.message ?? "An error occurred.";
-      });
+      setState(() => errorMessage = e.message ?? 'An error occurred.');
     } finally {
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) setState(() => isLoading = false);
     }
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -66,14 +74,10 @@ class _LoginScreenState extends State<LoginScreen> {
             const Text(
               "Log in to access your smart septic tank monitoring system ...",
               textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white70,
-                fontSize: 13,
-              ),
+              style: TextStyle(color: Colors.white70, fontSize: 13),
             ),
             const SizedBox(height: 25),
 
-            
             Container(
               width: double.infinity,
               decoration: const BoxDecoration(
@@ -84,18 +88,9 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Logo
-                  Image.asset(
-                    'assets/logo.png',
-                    height: 40,
-                  ),
+                  Image.asset('assets/logo.png', height: 40),
                   const SizedBox(height: 20),
-
-                  // Septic System Image
-                  Image.asset(
-                    'assets/septic_system.png',
-                    height: 100,
-                  ),
+                  Image.asset('assets/septic_system.png', height: 100),
                   const SizedBox(height: 20),
 
                   const Align(
@@ -110,6 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
+
                   TextField(
                     controller: emailController,
                     keyboardType: TextInputType.emailAddress,
@@ -122,6 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
+
                   TextField(
                     controller: passwordController,
                     obscureText: true,
@@ -133,19 +130,17 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
+
                   const SizedBox(height: 20),
                   if (errorMessage.isNotEmpty)
-                    Text(
-                      errorMessage,
-                      style: const TextStyle(color: Colors.red),
-                    ),
+                    Text(errorMessage, style: const TextStyle(color: Colors.red)),
                   const SizedBox(height: 10),
+
                   ElevatedButton(
                     onPressed: isLoading ? null : loginUser,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF0F3C1E),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 40, vertical: 14),
+                      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
@@ -153,15 +148,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: isLoading
                         ? const CircularProgressIndicator(color: Colors.white)
                         : const Text("LOGIN",
-                            style:
-                                TextStyle(fontSize: 16, color: Colors.white)),
+                            style: TextStyle(fontSize: 16, color: Colors.white)),
                   ),
                   const SizedBox(height: 15),
+
                   TextButton(
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const RegisterScreen()),
+                        MaterialPageRoute(builder: (_) => const RegisterScreen()),
                       );
                     },
                     child: const Text(
@@ -172,25 +167,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         fontSize: 14,
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             )
           ],
         ),
       ),
-    );
-  }
-}
-
-class SuccessScreen extends StatelessWidget {
-  const SuccessScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Welcome")),
-      body: const Center(child: Text("Login Successful!")),
     );
   }
 }
