@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../db_service.dart';
 import '../widgets/tank_gauge.dart';
+import 'emergency_services_screen.dart';
+
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -70,6 +72,8 @@ class HomeScreen extends StatelessWidget {
                 ),
 
                   const SizedBox(height: 40),
+
+                  
                 ],
               ),
             ),
@@ -132,6 +136,7 @@ class _BottomNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
+
     return BottomAppBar(
       height: 64,
       padding: const EdgeInsets.symmetric(horizontal: 28),
@@ -139,14 +144,42 @@ class _BottomNav extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Icon(Icons.home_filled, color: cs.primary),
-          Icon(Icons.wb_sunny_outlined, color: cs.outline),
-          Icon(Icons.settings_outlined, color: cs.outline),
+          // Left: Home (current page → no-op)
+          IconButton(
+            tooltip: 'Home',
+            icon: Icon(Icons.home_filled, color: cs.primary),
+            onPressed: () {
+              // Already on Home. Keep as no-op to avoid changing other flows.
+            },
+          ),
+
+          // Middle: Emergency Services (navigate)
+          IconButton(
+            tooltip: 'Emergency Services',
+            icon: Icon(Icons.wb_sunny_outlined, color: cs.outline),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const EmergencyServicesScreen(),
+                ),
+              );
+            },
+          ),
+
+          // Right: Settings (leave as a placeholder / no-op for now)
+          IconButton(
+            tooltip: 'Settings',
+            icon: Icon(Icons.settings_outlined, color: cs.outline),
+            onPressed: () {
+              // TODO: hook up your settings screen later
+            },
+          ),
         ],
       ),
     );
   }
 }
+
 
 /// Simple placeholder while first data frame arrives
 class _GaugeSkeleton extends StatelessWidget {

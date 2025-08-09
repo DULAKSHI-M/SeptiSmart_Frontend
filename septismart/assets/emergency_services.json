@@ -1,0 +1,30 @@
+[
+  {
+    "_id": { "$oid": "65f02d4e8b9a987a4c87b123" },
+    "name": "CleanTech (PVT) LTD",
+    "address": "No.141 Bernard Soysa Mawatha, Colombo 00500",
+    "phoneNumber": "+94 11 236 8768",
+    "rating": 4.2
+  },
+  {
+    "_id": { "$oid": "65f02d4e8b9a987a4c87b124" },
+    "name": "Tanclean Lanka",
+    "address": "No20 Tickell Rd, Colombo 00800",
+    "phoneNumber": "+94 72 791 5900",
+    "rating": 5
+  },
+  {
+    "_id": { "$oid": "65f02d4e8b9a987a4c87b125" },
+    "name": "Cleanplus (Pvt) Ltd",
+    "address": "No.254 Temple Rd, Nugegoda 10250",
+    "phoneNumber": "+94 11 763 2950",
+    "rating": 4.5
+  },
+  {
+    "_id": { "$oid": "65f02d4e8b9a987a4c87b126" },
+    "name": "Carekleen (Pvt) Ltd",
+    "address": "No.125 Jawatta Rd, Colombo 00500",
+    "phoneNumber": "+94 77 725 1351",
+    "rating": 4.0
+  }
+]

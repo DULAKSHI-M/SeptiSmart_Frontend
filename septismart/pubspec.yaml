@@ -31,3 +31,5 @@ flutter:
   assets:
     - assets/logo.png
     - assets/septic_system.png
+    - assets/emergency_services.json
+    
