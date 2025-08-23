@@ -3,6 +3,7 @@ import '../db_service.dart';
 import '../widgets/tank_gauge.dart';
 import 'emergency_services_screen.dart';
 import 'screens/monthly_report_screen.dart';
+import 'screens/settings_screen.dart';
 
 /// Simple alert record to show in the notifications sheet
 class TankAlert {
@@ -206,8 +207,7 @@ class _HomeScreenState extends State<HomeScreen> {
           slivers: [
             SliverToBoxAdapter(child: _Header()),
             SliverPadding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
               sliver: SliverList.list(
                 children: [
                   const SizedBox(height: 8),
@@ -241,13 +241,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   const SizedBox(height: 26),
                   Center(
-                    child: Text(
-                      'Click icon to see more…',
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelLarge
-                          ?.copyWith(color: Theme.of(context).hintColor),
-                    ),
+                    
                   ),
                   const SizedBox(height: 12),
 
@@ -265,10 +259,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       onPressed: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                              builder: (_) => const MonthlyReportScreen()),
+                            builder: (_) => const MonthlyReportScreen(),
+                          ),
                         );
                       },
-                      child: const Text('Tap here'),
+                      child: const Text('Monthly Report '),
                     ),
                   ),
 
@@ -329,6 +324,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
+
+      // >>> Bottom navigation with working Settings button <<<
       bottomNavigationBar: _BottomNav(),
     );
   }
@@ -351,7 +348,10 @@ class _Badge extends StatelessWidget {
       child: Text(
         text,
         style: const TextStyle(
-            color: Colors.white, fontSize: 10, fontWeight: FontWeight.w700),
+          color: Colors.white,
+          fontSize: 10,
+          fontWeight: FontWeight.w700,
+        ),
       ),
     );
   }
@@ -440,12 +440,16 @@ class _BottomNav extends StatelessWidget {
             },
           ),
 
-          // Right: Settings (placeholder)
+          // Right: Settings (NOW WORKING)
           IconButton(
             tooltip: 'Settings',
             icon: Icon(Icons.settings_outlined, color: cs.outline),
             onPressed: () {
-              // TODO: hook up your settings screen later
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const SettingsScreen(),
+                ),
+              );
             },
           ),
         ],
