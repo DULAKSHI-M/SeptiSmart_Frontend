@@ -32,14 +32,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
       }
 
       try {
-        // 🔐 Create user in Firebase Auth
+        // Create user in Firebase Auth
         UserCredential userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(
               email: emailController.text.trim(),
               password: passwordController.text.trim(),
             );
 
-        // ✅ Optional: Save more user info
+        //  Optional: Save more user info
         String uid = userCredential.user!.uid;
         DatabaseReference userRef = FirebaseDatabase.instance
             .ref()
@@ -54,7 +54,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           "locationConsent": locationConsent,
         });
 
-        // 🎉 Show success message & return to login
+        //  Show success message & return to login
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Registration successful!")),
         );

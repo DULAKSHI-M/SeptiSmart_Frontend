@@ -31,7 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
         password: passwordController.text.trim(),
       );
 
-      // 👉 redirect to HomeScreen
+      // redirect to HomeScreen
       if (!mounted) return;
       Navigator.pushAndRemoveUntil(
         context,
